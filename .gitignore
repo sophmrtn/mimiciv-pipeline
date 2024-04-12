@@ -3,3 +3,6 @@ scrap
 *.gzip
 *.csv.gz
 *summary*.txt
+data/
+*/__pycache__
+*/.ipynb_checkpoints
