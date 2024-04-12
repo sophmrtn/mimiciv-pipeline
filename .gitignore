@@ -4,5 +4,6 @@ scrap
 *.csv.gz
 *summary*.txt
 data/
-*/__pycache__
+*/__pycache__/
 */.ipynb_checkpoints
+*.pyc
