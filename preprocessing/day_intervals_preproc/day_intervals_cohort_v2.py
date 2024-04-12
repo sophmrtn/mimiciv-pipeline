@@ -138,9 +138,9 @@ def partition_by_readmit(df:pd.DataFrame, gap:datetime.timedelta, group_col:str,
     For a given visit, another visit must occur within the gap window for a positive readmission label.
     The gap window starts from the disch_col time and the admit_col of subsequent visits are considered."""
     
-    case = pd.DataFrame()   # hadm_ids with readmission within the gap period
-    ctrl = pd.DataFrame()   # hadm_ids without readmission within the gap period
-    invalid = pd.DataFrame()    # hadm_ids that are not considered in the cohort
+    case = pd.DataFrame(columns=df.columns)   # hadm_ids with readmission within the gap period
+    ctrl = pd.DataFrame(columns=df.columns)   # hadm_ids without readmission within the gap period
+    invalid = pd.DataFrame(columns=df.columns)    # hadm_ids that are not considered in the cohort
 
     # Iterate through groupbys based on group_col (subject_id). Data is sorted by subject_id and admit_col (admittime)
     # to ensure that the most current hadm_id is last in a group.
@@ -151,7 +151,7 @@ def partition_by_readmit(df:pd.DataFrame, gap:datetime.timedelta, group_col:str,
 
         if group.shape[0] <= 1:
             #ctrl, invalid = validate_row(group.iloc[0], ctrl, invalid, max_year, disch_col, valid_col, gap)   # A group with 1 row has no readmission; goes to ctrl
-            ctrl = ctrl.append(group.iloc[0])
+            ctrl.loc[len(ctrl.index)] = group.iloc[0].values
         else:
             for idx in range(group.shape[0]-1):
                 visit_time = group.iloc[idx][disch_col]  # For each index (a unique hadm_id), get its timestamp
@@ -160,21 +160,30 @@ def partition_by_readmit(df:pd.DataFrame, gap:datetime.timedelta, group_col:str,
                     (group[admit_col] - visit_time <= gap)   # Distance between a timestamp and readmission must be within gap
                     ].shape[0] >= 1:                # If ANY rows meet above requirements, a readmission has occurred after that visit
 
-                    case = case.append(group.iloc[idx])
+                    # case = pd.concat([case, pd.DataFrame(group.iloc[idx])], ignore_index=True)
+                    case.loc[len(case.index)] = group.iloc[idx].values
+
                 else:
                     # If no readmission is found, only add to ctrl if prediction window is guaranteed to be within the
                     # time range of the dataset (2008-2019). Visits with prediction windows existing in potentially out-of-range
                     # dates (like 2018-2020) are excluded UNLESS the prediction window takes place the same year as the visit,
                     # in which case it is guaranteed to be within 2008-2019
 
-                    ctrl = ctrl.append(group.iloc[idx])
+                    ctrl.loc[len(ctrl.index)] = group.iloc[idx].values
+
+                    # ctrl = pd.concat([ctrl, pd.DataFrame(group.iloc[idx])], ignore_index=True)
 
             #ctrl, invalid = validate_row(group.iloc[-1], ctrl, invalid, max_year, disch_col, valid_col, gap)  # The last hadm_id datewise is guaranteed to have no readmission logically
-            ctrl = ctrl.append(group.iloc[-1])
+            # ctrl =  pd.concat([ctrl, pd.DataFrame(group.iloc[-1])], ignore_index=True)
+            ctrl.loc[len(ctrl.index)] = group.iloc[-1].values
+
             #print(f"[ {gap.days} DAYS ] {case.shape[0] + ctrl.shape[0]}/{df.shape[0]} {visit_col}s processed")
 
+    case['label'] = np.ones(case.shape[0]).astype(int)
+    ctrl['label'] = np.zeros(ctrl.shape[0]).astype(int)
+    
     print("[ READMISSION LABELS FINISHED ]")
-    return case, ctrl, invalid
+    return pd.concat([case,ctrl], axis=0), invalid
 
 
 def partition_by_mort(df:pd.DataFrame, group_col:str, visit_col:str, admit_col:str, disch_col:str, death_col:str):
@@ -206,6 +215,7 @@ def partition_by_mort(df:pd.DataFrame, group_col:str, visit_col:str, admit_col:s
     pos_cohort['label'] = np.where((pos_cohort[death_col] >= pos_cohort[admit_col]) & (pos_cohort[death_col] <= pos_cohort[disch_col]),1,0)
     
     pos_cohort['label'] = pos_cohort['label'].astype("Int32")
+    
     cohort=pd.concat([pos_cohort,neg_cohort], axis=0)
     cohort=cohort.sort_values(by=[group_col,admit_col])
     #print("cohort",cohort.shape)
@@ -236,13 +246,8 @@ def get_case_ctrls(df:pd.DataFrame, gap:int, group_col:str, visit_col:str, admit
     elif use_admn:
         gap = datetime.timedelta(days=gap)
         # transform gap into a timedelta to compare with datetime columns
-        case, ctrl, invalid = partition_by_readmit(df, gap, group_col, visit_col, admit_col, disch_col, valid_col)
-
+        return partition_by_readmit(df, gap, group_col, visit_col, admit_col, disch_col, valid_col)
         # case hadm_ids are labelled 1 for readmission, ctrls have a 0 label
-        case['label'] = np.ones(case.shape[0]).astype(int)
-        ctrl['label'] = np.zeros(ctrl.shape[0]).astype(int)
-
-        return pd.concat([case, ctrl], axis=0), invalid
     elif use_los:
         return partition_by_los(df, gap, group_col, visit_col, admit_col, disch_col, death_col)
 
