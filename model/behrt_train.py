@@ -3,9 +3,6 @@ import pandas as pd
 import math
 import time
 
-import pickle
-import numpy as np
-
 import os
 import importlib
 import sys
@@ -14,7 +11,6 @@ import behrt_model
 from behrt_model import *
 
 
-from pathlib import Path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 if not os.path.exists("./data/behrt"):
     os.makedirs("./data/behrt")

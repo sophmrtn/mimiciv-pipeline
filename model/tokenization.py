@@ -3,9 +3,7 @@ import pickle
 import numpy as np
 import tqdm
 import os
-import importlib
 import sys
-from pathlib import Path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 
 class BEHRT_models():

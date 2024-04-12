@@ -3,12 +3,9 @@ import os
 import sys
 import numpy as np
 import pandas as pd
-from pathlib import Path
 from tqdm import tqdm
-import importlib
 import disease_cohort
-importlib.reload(disease_cohort)
-import disease_cohort
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 if not os.path.exists("./data/cohort"):
     os.makedirs("./data/cohort")

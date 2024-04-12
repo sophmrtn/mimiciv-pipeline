@@ -1,24 +1,20 @@
 import pandas as pd
 import numpy as np
 import pickle
-import torch
 import random
 import os
 import importlib
 import sys
 import numpy as np
 import evaluation
-from sklearn.model_selection import KFold
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-import xgboost as xgb
-from pathlib import Path
+
+# import xgboost as xgb
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import HistGradientBoostingClassifier
 
 from imblearn.over_sampling import RandomOverSampler
-from sklearn.metrics import classification_report
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 
 importlib.reload(evaluation)
@@ -162,18 +158,18 @@ class ML_models():
             self.loss(prob[:,1],np.asarray(Y_test),logits[:,1],False,True)
             self.save_outputImp(Y_test,prob[:,1],logits[:,1],model.feature_importances_,X_train.columns)
         
-        elif self.model_type=='Xgboost':
-            X_train=pd.get_dummies(X_train,prefix=['gender','ethnicity','insurance'],columns=['gender','ethnicity','insurance'])
-            X_test=pd.get_dummies(X_test,prefix=['gender','ethnicity','insurance'],columns=['gender','ethnicity','insurance'])
-            model = xgb.XGBClassifier(objective="binary:logistic").fit(X_train, Y_train)
-            #logits=model.predict_log_proba(X_test)
-            #print(self.test_data['ethnicity'])
-            #print(self.test_data.shape)
-            #print(self.test_data.head())
-            prob=model.predict_proba(X_test)
-            logits=np.log2(prob[:,1]/prob[:,0])
-            self.loss(prob[:,1],np.asarray(Y_test),logits,False,True)
-            self.save_outputImp(Y_test,prob[:,1],logits,model.feature_importances_,X_train.columns)
+        # elif self.model_type=='Xgboost':
+        #     X_train=pd.get_dummies(X_train,prefix=['gender','ethnicity','insurance'],columns=['gender','ethnicity','insurance'])
+        #     X_test=pd.get_dummies(X_test,prefix=['gender','ethnicity','insurance'],columns=['gender','ethnicity','insurance'])
+        #     model = xgb.XGBClassifier(objective="binary:logistic").fit(X_train, Y_train)
+        #     #logits=model.predict_log_proba(X_test)
+        #     #print(self.test_data['ethnicity'])
+        #     #print(self.test_data.shape)
+        #     #print(self.test_data.head())
+        #     prob=model.predict_proba(X_test)
+        #     logits=np.log2(prob[:,1]/prob[:,0])
+        #     self.loss(prob[:,1],np.asarray(Y_test),logits,False,True)
+        #     self.save_outputImp(Y_test,prob[:,1],logits,model.feature_importances_,X_train.columns)
 
 
     

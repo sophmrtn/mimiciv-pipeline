@@ -2,41 +2,26 @@
 # coding: utf-8
 
 import pickle
-import matplotlib.pyplot as plt
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
 import pandas as pd
 import numpy as np
 import torch as T
 import torch
-import math
-from sklearn import metrics
-import torch.nn as nn
 from torch import optim
 import importlib
-import torch.nn.functional as F
-import import_ipynb
 import model_utils
 import evaluation
 import parameters
 from parameters import *
 #import model as model
 import mimic_model as model
-import random
-from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
-from sklearn.preprocessing import StandardScaler, OneHotEncoder, MinMaxScaler
+
 from imblearn.over_sampling import RandomOverSampler
-from pickle import dump,load
-from sklearn.model_selection import train_test_split
-import captum
-from captum.attr import IntegratedGradients, Occlusion, LayerGradCam, LayerAttribution,LayerDeepLift,DeepLift
+from captum.attr import DeepLift
 
 #import torchvision.utils as utils
-import argparse
-from torch.autograd import Variable
-from argparse import ArgumentParser
-import matplotlib.pyplot as plt
-get_ipython().run_line_magic('matplotlib', 'inline')
+# get_ipython().run_line_magic('matplotlib', 'inline')
 
 import warnings
 warnings.filterwarnings('ignore')
