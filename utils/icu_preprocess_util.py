@@ -1,13 +1,11 @@
-import csv
+import ast
+import os
+
 import numpy as np
 import pandas as pd
-import sys, os
-import re
-import ast
-import datetime as dt
+from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm import tqdm
 
-from sklearn.preprocessing import MultiLabelBinarizer
 
 ########################## GENERAL ##########################
 def dataframe_from_csv(path, compression='gzip', header=0, index_col=0, chunksize=None):
@@ -200,7 +198,7 @@ def preproc_chart(dataset_path: str, cohort_path:str, time_col:str, dtypes: dict
         count=count+1
         #chunk['valuenum']=chunk['valuenum'].fillna(0)
         chunk=chunk.dropna(subset=['valuenum'])
-        chunk_merged=chunk.merge(cohort[['stay_id', 'intime']], how='inner', left_on='stay_id', right_on='stay_id')
+        chunk_merged=chunk.merge(cohort[['subject_id', 'stay_id', 'intime']], how='inner', left_on='stay_id', right_on='stay_id')
         chunk_merged['event_time_from_admit'] = chunk_merged[time_col] - chunk_merged['intime']
         
         del chunk_merged[time_col] 

@@ -1,24 +1,23 @@
-import pandas as pd
-import numpy as np
+import importlib
+import os
 import pickle
 import random
-import os
-import importlib
 import sys
-import numpy as np
+
 import evaluation
+import numpy as np
+import pandas as pd
+from imblearn.over_sampling import RandomOverSampler
 
 # import xgboost as xgb
-from sklearn.ensemble import HistGradientBoostingClassifier
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import HistGradientBoostingClassifier
 
-from imblearn.over_sampling import RandomOverSampler
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 
 importlib.reload(evaluation)
 import evaluation
+
 # MAX_LEN=12
 # MAX_COND_SEQ=56
 # MAX_PROC_SEQ=40
@@ -27,7 +26,7 @@ import evaluation
 # MAX_BMI_SEQ=118
 
 
-class ML_models():
+class ML_models:
     def __init__(self,data_icu,k_fold,model_type,concat,oversampling):
         self.data_icu=data_icu
         self.k_fold=k_fold
@@ -77,7 +76,7 @@ class ML_models():
         
         labels=pd.read_csv('./data/csv/labels.csv', header=0)
         for i in range(self.k_fold):
-            print("==================={0:2d} FOLD=====================".format(i))
+            print(f"==================={i:2d} FOLD=====================")
             test_hids=k_hids[i]
             train_ids=list(set([0,1,2,3,4])-set([i]))
             train_hids=[]
@@ -208,13 +207,12 @@ class ML_models():
                         else:
                             agg=dyn_temp.aggregate("max")
                             agg=agg.reset_index()
+                    elif ((key=="LAB") or (key=="MEDS")):
+                        agg=dyn_temp.aggregate("mean")
+                        agg=agg.reset_index()
                     else:
-                        if ((key=="LAB") or (key=="MEDS")):
-                            agg=dyn_temp.aggregate("mean")
-                            agg=agg.reset_index()
-                        else:
-                            agg=dyn_temp.aggregate("max")
-                            agg=agg.reset_index()
+                        agg=dyn_temp.aggregate("max")
+                        agg=agg.reset_index()
                     if dyn_df.empty:
                         dyn_df=agg
                     else:

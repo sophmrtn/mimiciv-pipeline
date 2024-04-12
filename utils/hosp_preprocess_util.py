@@ -1,19 +1,20 @@
-import csv
+import ast
+import datetime as dt
+import importlib
+import os
+import re
+
+import labs_preprocess_util
 import numpy as np
 import pandas as pd
-import sys, os
-import re
-import ast
-import importlib
-import datetime as dt
-from tqdm import tqdm
-import labs_preprocess_util
 from labs_preprocess_util import *
-
 from sklearn.preprocessing import MultiLabelBinarizer
+from tqdm import tqdm
+
 importlib.reload(labs_preprocess_util)
 import labs_preprocess_util
 from labs_preprocess_util import *
+
 
 ########################## GENERAL ##########################
 def dataframe_from_csv(path, compression='gzip', header=0, index_col=0, chunksize=None):

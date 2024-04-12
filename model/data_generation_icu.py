@@ -1,20 +1,18 @@
+import os
+import pickle
+import sys
+
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from datetime import datetime
-from sklearn.preprocessing import LabelEncoder
-import pickle
-import datetime
-import os
-import sys
-from pathlib import Path
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 if not os.path.exists("./data/dict"):
     os.makedirs("./data/dict")
 if not os.path.exists("./data/csv"):
     os.makedirs("./data/csv")
     
-class Generator():
+class Generator:
     def __init__(self,cohort_output,if_mort,if_admn,if_los,feat_cond,feat_proc,feat_out,feat_chart,feat_med,impute,include_time=24,bucket=1,predW=6):
         self.feat_cond,self.feat_proc,self.feat_out,self.feat_chart,self.feat_med = feat_cond,feat_proc,feat_out,feat_chart,feat_med
         self.cohort_output=cohort_output

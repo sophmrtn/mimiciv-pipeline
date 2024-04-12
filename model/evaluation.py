@@ -1,17 +1,15 @@
 import os
-#import jsondim
-import torch
-from torch import nn
-import torch.nn.functional as F
-from torch.autograd import *
-from sklearn import metrics
-from sklearn.calibration import calibration_curve
-import pickle
+import sys
+
 import matplotlib.pyplot as plt
 import numpy as np
-from collections import defaultdict
-import sys
-from pathlib import Path
+
+#import jsondim
+import torch
+from sklearn import metrics
+from torch import nn
+from torch.autograd import *
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 
 if not os.path.exists("./data/output"):
@@ -149,17 +147,17 @@ class Loss(nn.Module):
         #################           Fairness         #######################
         
         
-        print("BCE Loss: {:.2f}".format(classify_loss))
-        print("AU-ROC: {:.2f}".format(auc))
-        print("AU-PRC: {:.2f}".format(apr))
-        print("AU-PRC Baaseline: {:.2f}".format(base))
-        print("Accuracy: {:.2f}".format(accur))
-        print("Precision: {:.2f}".format(prec))
-        print("Recall: {:.2f}".format(recall))
-        print("Specificity: {:.2f}".format(spec))
-        print("NPV: {:.2f}".format(npv_val))
-        print("ECE: {:.2f}".format(ECE))
-        print("MCE: {:.2f}".format(MCE))
+        print(f"BCE Loss: {classify_loss:.2f}")
+        print(f"AU-ROC: {auc:.2f}")
+        print(f"AU-PRC: {apr:.2f}")
+        print(f"AU-PRC Baaseline: {base:.2f}")
+        print(f"Accuracy: {accur:.2f}")
+        print(f"Precision: {prec:.2f}")
+        print(f"Recall: {recall:.2f}")
+        print(f"Specificity: {spec:.2f}")
+        print(f"NPV: {npv_val:.2f}")
+        print(f"ECE: {ECE:.2f}")
+        print(f"MCE: {MCE:.2f}")
         
         #return [classify_loss, auc,apr,base,accur,prec,recall,spec,npv_val,ECE,MCE]
     
@@ -210,8 +208,8 @@ class Loss(nn.Module):
         plt.gca().set_aspect('equal', adjustable='box')
 
         # ECE and MCE legend
-        ECE_patch = mpatches.Patch(color='green', label='ECE = {:.2f}%'.format(ECE*100))
-        MCE_patch = mpatches.Patch(color='red', label='MCE = {:.2f}%'.format(MCE*100))
+        ECE_patch = mpatches.Patch(color='green', label=f'ECE = {ECE*100:.2f}%')
+        MCE_patch = mpatches.Patch(color='red', label=f'MCE = {MCE*100:.2f}%')
         plt.legend(handles=[ECE_patch, MCE_patch])
         plt.savefig('./data/output/'+"callibration_plot.png")
         #plt.show()

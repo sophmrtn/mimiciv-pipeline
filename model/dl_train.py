@@ -1,29 +1,30 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-import pickle
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
-import pandas as pd
-import numpy as np
-import torch as T
-import torch
-from torch import optim
-import importlib
-import model_utils
-import evaluation
-import parameters
-from parameters import *
-#import model as model
-import mimic_model as model
+import pickle
 
-from imblearn.over_sampling import RandomOverSampler
-from captum.attr import DeepLift
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
+import importlib
 
 #import torchvision.utils as utils
 # get_ipython().run_line_magic('matplotlib', 'inline')
-
 import warnings
+
+import evaluation
+
+#import model as model
+import mimic_model as model
+import model_utils
+import numpy as np
+import pandas as pd
+import parameters
+import torch
+import torch as T
+from captum.attr import DeepLift
+from imblearn.over_sampling import RandomOverSampler
+from parameters import *
+from torch import optim
+
 warnings.filterwarnings('ignore')
 warnings.simplefilter('ignore')
 
@@ -33,16 +34,19 @@ if not os.path.exists("saved_models"):
 
 importlib.reload(model_utils)
 import model_utils
+
 importlib.reload(model)
 import mimic_model as model
+
 importlib.reload(parameters)
 import parameters
 from parameters import *
+
 importlib.reload(evaluation)
 import evaluation
 
 
-class DL_models():
+class DL_models:
     def __init__(self,data_icu,diag_flag,proc_flag,out_flag,chart_flag,med_flag,lab_flag,model_type,k_fold,oversampling,model_name,train):
         self.save_path="saved_models/"+model_name+".tar"
         self.data_icu=data_icu
@@ -120,7 +124,7 @@ class DL_models():
             self.create_model(self.model_type)
             print("[ MODEL CREATED ]")
             print(self.net)
-            print("==================={0:2d} FOLD=====================".format(i))
+            print(f"==================={i:2d} FOLD=====================")
             
             test_hids=list(k_hids[i])
             #test_hids=test_hids[0:200]
@@ -137,14 +141,14 @@ class DL_models():
             counter=0
             for epoch in range(args.num_epochs):
                 if counter==args.patience:
-                    print("STOPPING THE TRAINING BECAUSE VALIDATION ERROR DID NOT IMPROVE FOR {:.1f} EPOCHS".format(args.patience))
+                    print(f"STOPPING THE TRAINING BECAUSE VALIDATION ERROR DID NOT IMPROVE FOR {args.patience:.1f} EPOCHS")
                     break
                 train_prob=[]
                 train_logits=[]
                 train_truth=[]
                 self.net.train()
             
-                print("======= EPOCH {:.1f} ========".format(epoch))
+                print(f"======= EPOCH {epoch:.1f} ========")
                 for nbatch in range(int(len(train_hids)/(args.batch_size))):
                     meds,chart,out,proc,lab,stat_train,demo_train,Y_train=self.getXY(train_hids[nbatch*args.batch_size:(nbatch+1)*args.batch_size],labels)
 #                     print(chart.shape)

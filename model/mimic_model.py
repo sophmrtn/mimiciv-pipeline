@@ -1,24 +1,17 @@
-import os
 #import jsondim
-import torch
-from torch import nn
-import torch.nn.functional as F
-from torch.autograd import *
-from sklearn import metrics
 import importlib
-import numpy as np
-from collections import defaultdict
-import sys
+
 import parameters
+import torch
+import torch.nn.functional as F
 from parameters import *
-import argparse
-import captum
-from captum.attr import IntegratedGradients, Occlusion, LayerGradCam, LayerAttribution
-from argparse import ArgumentParser
+from torch import nn
+from torch.autograd import *
 
 importlib.reload(parameters)
 import parameters
 from parameters import *
+
 
 class LSTMBase(nn.Module):
     def __init__(self,device,cond_vocab_size,proc_vocab_size,med_vocab_size,out_vocab_size,chart_vocab_size,lab_vocab_size,eth_vocab_size,gender_vocab_size,age_vocab_size,ins_vocab_size,modalities,embed_size,rnn_size,batch_size):

@@ -1,11 +1,8 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # In[ ]:
 
 
-import pandas as pd
-import numpy as np
 
 
 def drop_wrong_uom(data, cut_off):

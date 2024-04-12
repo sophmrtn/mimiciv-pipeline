@@ -1,12 +1,14 @@
-import pandas as pd
-import pickle
-import numpy as np
-import tqdm
 import os
+import pickle
 import sys
+
+import numpy as np
+import pandas as pd
+import tqdm
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 
-class BEHRT_models():
+class BEHRT_models:
     def __init__(self,data_icu,diag_flag,proc_flag,out_flag,chart_flag,med_flag,lab_flag):
         self.data_icu=data_icu
         if self.data_icu:

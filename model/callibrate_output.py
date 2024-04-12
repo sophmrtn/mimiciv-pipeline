@@ -1,28 +1,21 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # In[ ]:
 
 
-import pandas as pd
-import numpy as np
-import pickle
-import torch
-import random
-import os
-import sys
-import torch
-import math
-from sklearn import metrics
-import torch.nn as nn
-from torch import optim
 import importlib
+import os
+import pickle
+import sys
+
 import evaluation
+import torch
+from torch import nn, optim
+
 importlib.reload(evaluation)
+
 import evaluation
 
-
-from pathlib import Path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 
 

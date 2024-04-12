@@ -1,15 +1,13 @@
 
-import pandas as pd
+import importlib
 import math
+import os
+import sys
 import time
 
-import os
-import importlib
-import sys
-
 import behrt_model
+import pandas as pd
 from behrt_model import *
-
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 if not os.path.exists("./data/behrt"):
@@ -20,7 +18,8 @@ importlib.reload(behrt_model)
 import behrt_model
 from behrt_model import *
 
-class train_behrt():
+
+class train_behrt:
     def __init__(self,src, age, sex, ethni, ins, target_data):
 
         train_l = int(len(src)*0.70)
@@ -144,10 +143,7 @@ class train_behrt():
         preds = torch.sigmoid(torch.FloatTensor(preds.values))
         labels = torch.IntTensor(labels.values)
         print(preds)
-        from torchmetrics import AUROC
-        from torchmetrics import AveragePrecision
-        from torchmetrics import Precision
-        from torchmetrics import Recall
+        from torchmetrics import AUROC, AveragePrecision, Precision, Recall
 
 
         auroc = AUROC(pos_label=1)
@@ -204,10 +200,10 @@ class train_behrt():
                 print("Epoch n" + str(e))
                 train_loss, train_time_cost = run_epoch(e, trainload, device)
                 val_loss, val_time_cost,pred, label = eval(valload, False, device)
-                train_loss = train_loss / math.ceil((train_params["train_data_len"] / train_params['batch_size']))
-                val_loss = val_loss / math.ceil((train_params["val_data_len"] / train_params['batch_size']))
-                print('TRAIN {}\t{} secs\n'.format(train_loss, train_time_cost))
-                print('EVAL {}\t{} secs\n'.format(val_loss, val_time_cost))
+                train_loss = train_loss / math.ceil(train_params["train_data_len"] / train_params['batch_size'])
+                val_loss = val_loss / math.ceil(train_params["val_data_len"] / train_params['batch_size'])
+                print(f'TRAIN {train_loss}\t{train_time_cost} secs\n')
+                print(f'EVAL {val_loss}\t{val_time_cost} secs\n')
                 if val_loss < best_val:
                     print("** ** * Saving fine - tuned model ** ** * ")
                     model_to_save = behrt.module if hasattr(behrt, 'module') else behrt

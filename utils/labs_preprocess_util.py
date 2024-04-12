@@ -1,12 +1,14 @@
 import os
-from glob import glob
-from uuid import uuid1
-from functools import partial
-from multiprocessing import Pool
 from collections import defaultdict
-from typing import Union, List, Tuple
-import pandas as pd
+from functools import partial
+from glob import glob
+from multiprocessing import Pool
+from typing import List, Tuple, Union
+from uuid import uuid1
+
 import numpy as np
+import pandas as pd
+
 if not os.path.exists("./data/temp"):
     os.makedirs("./data/temp")
 

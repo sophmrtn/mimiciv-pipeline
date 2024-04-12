@@ -1,17 +1,16 @@
+import os
+import pickle
+import sys
+
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from datetime import datetime
-import pickle
-import datetime
-import os
-import sys
-from pathlib import Path
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 if not os.path.exists("./data/dict"):
     os.makedirs("./data/dict")
     
-class Generator():
+class Generator:
     def __init__(self,cohort_output,if_mort,if_admn,if_los,feat_cond,feat_lab,feat_proc,feat_med,impute,include_time=24,bucket=1,predW=0):
         self.impute=impute
         self.feat_cond,self.feat_proc,self.feat_med,self.feat_lab = feat_cond,feat_proc,feat_med,feat_lab

@@ -1,17 +1,14 @@
+import os
+import pickle
+import sys
+
+import numpy as np
 import torch
-import torch.nn as nn
+from torch import nn
+
 # import pytorch_pretrained_bert as Bert
 from torch.utils.data.dataset import Dataset
-import numpy as np
-import os
-import sys
-import random
-import pandas as pd
-import pickle
-import tqdm
-import importlib
 
-from pathlib import Path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 
 
@@ -171,7 +168,7 @@ class BertEmbeddings(nn.Module):
 #         self.ins_vocab_size = config.get('ins_vocab_size')
 #         self.number_output = config.get('number_output')
 
-class TrainConfig(object):
+class TrainConfig:
     def __init__(self, config):
         self.batch_size = config.get('batch_size')
         self.use_cuda = config.get('use_cuda')

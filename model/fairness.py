@@ -1,17 +1,14 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # In[ ]:
 
 
-import pandas as pd
-import numpy as np
-import pickle
-import torch
-import random
 import os
+import pickle
 import sys
-from pathlib import Path
+
+import pandas as pd
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 if not os.path.exists("./data/output"):
     os.makedirs("./data/output")
@@ -25,7 +22,7 @@ def fairness_evaluation(inputFile, outputFile):
 
     output_dict["Predicted"] = output_dict.apply(lambda row:1 if row.Prob>=0.5 else 0, axis=1)
 
-    output_dict["age_binned"] = output_dict.age.apply(lambda x:"{}-{}".format((x//10)*10,(x//10 + 1)*10))
+    output_dict["age_binned"] = output_dict.age.apply(lambda x:f"{(x//10)*10}-{(x//10 + 1)*10}")
     sensitive_columns = ["ethnicity", "gender", "age_binned"]
 
 

@@ -1,13 +1,14 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # In[ ]:
 
 
-import pandas as pd
-import numpy as np
 import os
 import sys
+
+import numpy as np
+import pandas as pd
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + './../..')
 
 def read_icd_mapping(map_path: str) -> pd.DataFrame:
