@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import random
 import pickle
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
@@ -163,7 +164,7 @@ class DL_models:
                     train_prob.extend(output.data.cpu().numpy())
                     train_truth.extend(Y_train.data.cpu().numpy())
                     train_logits.extend(logits.data.cpu().numpy())
-                
+            
                 #print(train_prob)
                 #print(train_truth)
                 self.loss(torch.tensor(train_prob),torch.tensor(train_truth),torch.tensor(train_logits),False,False)
@@ -190,6 +191,7 @@ class DL_models:
         val_truth=[]
         val_logits=[]
         self.net.eval()
+        
         #print(len(val_hids))
         for nbatch in range(int(len(val_hids)/(args.batch_size))):
             meds,chart,out,proc,lab,stat_train,demo_train,y=self.getXY(val_hids[nbatch*args.batch_size:(nbatch+1)*args.batch_size],labels)
