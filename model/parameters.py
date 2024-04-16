@@ -6,12 +6,12 @@ from argparse import ArgumentParser
 
 ARG_PARSER = ArgumentParser()
 
-ARG_PARSER.add_argument('--batch_size', default=200, type=int)
-ARG_PARSER.add_argument('--test_size', default=0.2, type=int)
-ARG_PARSER.add_argument('--val_size', default=0.1, type=int)
+ARG_PARSER.add_argument('--batch_size', default=4, type=int)
+ARG_PARSER.add_argument('--test_size', default=0.1, type=int)
+ARG_PARSER.add_argument('--val_size', default=0.2, type=int)
 
-ARG_PARSER.add_argument('--num_epochs', default=20, type=int)
-ARG_PARSER.add_argument('--patience', default=2, type=int)
+ARG_PARSER.add_argument('--num_epochs', default=50, type=int)
+ARG_PARSER.add_argument('--patience', default=10, type=int)
 
 
 # ARG_PARSER.add_argument('--cond_seq_len', default=39, type=int)#473
